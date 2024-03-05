@@ -1,0 +1,200 @@
+{
+  "info": {
+    "title": "GitHub Integration",
+    "description": "Facilitates interactions with GitHub repositories, including listing files, committing changes, and creating pull requests.",
+    "version": "v1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.github.com"
+    }
+  ],
+  "paths": {
+    "/repos/{owner}/{repo}/contents": {
+      "get": {
+        "description": "Lists the contents of the repository's root directory.",
+        "operationId": "listRootContents",
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "repo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Content list of the root directory returned successfully."
+          }
+        }
+      }
+    },
+    "/repos/{owner}/{repo}/contents/{path}": {
+      "get": {
+        "description": "Retrieves the contents of a directory or the content of a file from a GitHub repository at a specific path.",
+        "operationId": "getContentsByPath",
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "repo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Content list or file content returned successfully."
+          }
+        }
+      },
+      "put": {
+        "description": "Commits code to a specified file path within a GitHub repository.",
+        "operationId": "commitCodeToFile",
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "repo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "branch": {
+                    "type": "string"
+                  },
+                  "sha": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The blob SHA of the file being replaced, if applicable."
+                  }
+                },
+                "required": ["message", "content", "branch"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Commit created successfully."
+          }
+        }
+      }
+    },
+    "/repos/{owner}/{repo}/pulls": {
+      "post": {
+        "description": "Creates a pull request in a GitHub repository.",
+        "operationId": "createPullRequest",
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "repo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "head": {
+                    "type": "string"
+                  },
+                  "base": {
+                    "type": "string"
+                  }
+                },
+                "required": ["title", "head", "base"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Pull request created successfully."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {}
+  }
+}
